@@ -105,102 +105,21 @@ describe("Poker hand", () => {
     expect(playerOne.compareWith(playerTwo)).toBe(results.TIE);
   });
 
-  test("player one wins with pair", () => {
-    const playerOneHand = "AH AC 6D 7S 3C";
-    const playerTwoHand = "AS 9H TC 3D 5S";
-    const playerOne = new PokerHand(new PokerHandRules(), playerOneHand);
-    const playerTwo = new PokerHand(new PokerHandRules(), playerTwoHand);
-
-    expect(playerOne.compareWith(playerTwo)).toBe(results.WIN);
-  });
-
-  test("player one loose with high card", () => {
-    const playerOneHand = "AS 9H JC 3D 6S";
-    const playerTwoHand = "AD AS 6D 8S 3C";
-    const playerOne = new PokerHand(new PokerHandRules(), playerOneHand);
-    const playerTwo = new PokerHand(new PokerHandRules(), playerTwoHand);
-
-    expect(playerOne.compareWith(playerTwo)).toBe(results.LOSS);
-  });
-
-  test("player one and player two tie with pairs", () => {
-    const playerOneHand = "8D 8C JC 3D 6S";
-    const playerTwoHand = "AD AS 6D 8S 3C";
-    const playerOne = new PokerHand(new PokerHandRules(), playerOneHand);
-    const playerTwo = new PokerHand(new PokerHandRules(), playerTwoHand);
-
-    expect(playerOne.compareWith(playerTwo)).toBe(results.TIE);
-  });
-
-  test("player one wins with two pairs not case sensitive", () => {
-    const playerOneHand = "8h 8c jc 3d 3s";
-    const playerTwoHand = "Ad As 6d 8s 3c";
-    const playerOne = new PokerHand(new PokerHandRules(), playerOneHand);
-    const playerTwo = new PokerHand(new PokerHandRules(), playerTwoHand);
-
-    expect(playerOne.compareWith(playerTwo)).toBe(results.WIN);
-  });
-
-  test("player one loose with three of kind", () => {
-    const playerOneHand = "8H 8C JC 3D 3S";
-    const playerTwoHand = "3H 3D 8C 3S TC";
-    const playerOne = new PokerHand(new PokerHandRules(), playerOneHand);
-    const playerTwo = new PokerHand(new PokerHandRules(), playerTwoHand);
-
-    expect(playerOne.compareWith(playerTwo)).toBe(results.LOSS);
-  });
-
-  test("player one wins with straight", () => {
-    const playerOneHand = "7S 9C TH 8C 6D";
-    const playerTwoHand = "AD AS 6D 8S 3C";
-    const playerOne = new PokerHand(new PokerHandRules(), playerOneHand);
-    const playerTwo = new PokerHand(new PokerHandRules(), playerTwoHand);
-
-    expect(playerOne.compareWith(playerTwo)).toBe(results.WIN);
-  });
-
-  test("player one wins with flush", () => {
-    const playerOneHand = "2D 9D 7D KD JD";
-    const playerTwoHand = "3H 3D 8C 3S TC";
-    const playerOne = new PokerHand(new PokerHandRules(), playerOneHand);
-    const playerTwo = new PokerHand(new PokerHandRules(), playerTwoHand);
-
-    expect(playerOne.compareWith(playerTwo)).toBe(results.WIN);
-  });
-
-  test("player one loose with full house", () => {
-    const playerOneHand = "2D 9D 7D KD JD";
-    const playerTwoHand = "KS 3D 3C KS KC";
-    const playerOne = new PokerHand(new PokerHandRules(), playerOneHand);
-    const playerTwo = new PokerHand(new PokerHandRules(), playerTwoHand);
-
-    expect(playerOne.compareWith(playerTwo)).toBe(results.LOSS);
-  });
-
-  test("player one wins with four of kind", () => {
-    const playerOneHand = "QD QC QS QH JS";
-    const playerTwoHand = "KS 3D 3C KS KC";
-    const playerOne = new PokerHand(new PokerHandRules(), playerOneHand);
-    const playerTwo = new PokerHand(new PokerHandRules(), playerTwoHand);
-
-    expect(playerOne.compareWith(playerTwo)).toBe(results.WIN);
-  });
-
-  test("player one wins with straight flush", () => {
-    const playerOneHand = "8S 5S 9S 6S 7S";
-    const playerTwoHand = "KS 3D 3C KS KC";
-    const playerOne = new PokerHand(new PokerHandRules(), playerOneHand);
-    const playerTwo = new PokerHand(new PokerHandRules(), playerTwoHand);
-
-    expect(playerOne.compareWith(playerTwo)).toBe(results.WIN);
-  });
-
-  test("player one wins with royal flush", () => {
-    const playerOneHand = "AS KS TS QS JS";
-    const playerTwoHand = "8S 5S 9S 6S 7S";
-    const playerOne = new PokerHand(new PokerHandRules(), playerOneHand);
-    const playerTwo = new PokerHand(new PokerHandRules(), playerTwoHand);
-
-    expect(playerOne.compareWith(playerTwo)).toBe(results.WIN);
+  test.each([
+    { a: "AH AC 6D 7S 3C", b: "AS 9H TC 3D 5S", expected: results.WIN },
+    { a: "AS 9H JC 3D 6S", b: "AD AS 6D 8S 3C", expected: results.LOSS },
+    { a: "8D 8C JC 3D 6S", b: "AD AS 6D 8S 3C", expected: results.TIE },
+    { a: "8h 8c jc 3d 3s", b: "Ad As 6d 8s 3c", expected: results.WIN },
+    { a: "8H 8C JC 3D 3S", b: "3H 3D 8C 3S TC", expected: results.LOSS },
+    { a: "7S 9C TH 8C 6D", b: "AD AS 6D 8S 3C", expected: results.WIN },
+    { a: "2D 9D 7D KD JD", b: "3H 3D 8C 3S TC", expected: results.WIN },
+    { a: "2D 9D 7D KD JD", b: "KS 3D 3C KS KC", expected: results.LOSS },
+    { a: "QD QC QS QH JS", b: "KS 3D 3C KS KC", expected: results.WIN },
+    { a: "8S 5S 9S 6S 7S", b: "KS 3D 3C KS KC", expected: results.WIN },
+    { a: "AS KS TS QS JS", b: "8S 5S 9S 6S 7S", expected: results.WIN },
+  ])(".compareWith($a, $b)", ({ a, b, expected }) => {
+    const playerOne = new PokerHand(new PokerHandRules(), a);
+    const playerTwo = new PokerHand(new PokerHandRules(), b);
+    expect(playerOne.compareWith(playerTwo)).toBe(expected);
   });
 });
